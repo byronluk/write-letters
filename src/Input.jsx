@@ -6,11 +6,11 @@ class HandWrite extends Component {
     return (
       <form className='handwrite-form'>
         <textarea className='input-text' name='inputText' onChange={ this.props.onInputChange } />
-        <button className='spellcheck-button'>
+        <button className='spellcheck-button' onClick={ this.props.onSpellCheckClick }>
           SpellCheck
         </button>
-        <button className='handwrite-button' onClick={ this.props.onHandwriteClick }>
-          Handwrite
+        <button className='download-button' onClick={ this.props.onDownloadClick }>
+          Download
         </button>
       </form>
     );
