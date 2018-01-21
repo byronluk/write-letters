@@ -8,7 +8,7 @@ class Output extends Component {
         <h2>output box</h2>
         { this.props.imgSRC ?
           <img src={ this.props.imgSRC } alt='handwritten-letter' />
-        : <h3>Go ahead and type</h3>
+        : <h3>Start typing in the box to your left!</h3>
         }
       </div>
     );

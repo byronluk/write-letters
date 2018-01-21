@@ -1,5 +1,4 @@
 /* things to do
-add in functionality for update and reject buttons
 optional: add a download button to download pdf
 add in error handlers and loading handlers(if necessary)
 style and finish
@@ -60,8 +59,6 @@ function replaceLineBreaks(input) {
 }
 //  reformats results and replaces ' new line ' with \n
 function addLineBreaks(input) {
-  var y = input.replace(/\sNew\sline\s/g, '\n');
-  console.log(y);
   return input.replace(/\sNew\sline\s/g, '\n');
 }
 
@@ -79,6 +76,8 @@ class App extends Component {
     this.onDownloadClick = this.onDownloadClick.bind(this);
     this.delayHandwrite = this.delayHandwrite.bind(this);
     this.onSpellCheckClick = this.onSpellCheckClick.bind(this);
+    this.onUpdateClick = this.onUpdateClick.bind(this);
+    this.onRejectClick = this.onRejectClick.bind(this);
   }
   // sends request after debounce and x amount of seconds
   delayHandwrite = debounce(() => {
@@ -126,16 +125,19 @@ class App extends Component {
     }
     this.delayHandwrite();
   }
-
+  // get request to /pdf
   onDownloadClick(e) {
     e.preventDefault();
   }
 
   onSpellCheckClick(e) {
+    e.preventDefault();
+    if (!this.state.inputText) {
+      return alert('Please enter text for me to check');
+    }
     const stateCopy = Object.assign({}, this.state);
     // removes line breaks
     const singleLine = replaceLineBreaks(stateCopy.inputText);
-    e.preventDefault();
     const params = {
       text: singleLine,
     };
@@ -160,7 +162,23 @@ class App extends Component {
       .catch((err) => {
         return console.log(err);
       });
-  } 
+  }
+
+  onUpdateClick(e) {
+    e.preventDefault();
+    const updatedText = this.state.spellCheckText;
+    this.setState({
+      inputText: updatedText,
+      spellCheckEnabled: false,
+    });
+    this.delayHandwrite();
+  }
+  onRejectClick(e) {
+    e.preventDefault();
+    this.setState({
+      spellCheckEnabled: false,
+    });
+  }
 
   render() {
     return (
@@ -171,12 +189,15 @@ class App extends Component {
             onInputChange={ this.onInputChange }
             onDownloadClick={ this.onDownloadClick }
             onSpellCheckClick={ this.onSpellCheckClick }
+            updatedText={ this.state.inputText }
           />
           { this.state.spellCheckEnabled &&
           <SpellCheck
             updatedText={ this.state.spellCheckText }
             changesMade={ this.state.changesMade }
             onChange={ this.onInputChange }
+            onUpdate={ this.onUpdateClick }
+            onReject={ this.onRejectClick }
           />
           }
         </div>

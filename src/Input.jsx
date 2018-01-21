@@ -5,7 +5,12 @@ class HandWrite extends Component {
   render() {
     return (
       <form className='handwrite-form'>
-        <textarea className='input-text' name='inputText' onChange={ this.props.onInputChange } />
+        <textarea
+          className='input-text'
+          name='inputText'
+          onChange={ this.props.onInputChange }
+          value={ this.props.updatedText }
+        />
         <button className='spellcheck-button' onClick={ this.props.onSpellCheckClick }>
           SpellCheck
         </button>
@@ -29,10 +34,10 @@ class SpellCheck extends Component {
               value={ this.props.updatedText }
               onChange={ this.props.onChange }
             />
-            <button className='reject-button'>
+            <button className='reject-button' onClick={ this.props.onReject }>
               Reject
             </button>
-            <button className='update-button'>
+            <button className='update-button' onClick={ this.props.onUpdate }>
               Update
             </button>
           </form> :
