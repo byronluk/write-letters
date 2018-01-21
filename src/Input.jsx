@@ -18,18 +18,26 @@ class HandWrite extends Component {
 }
 
 class SpellCheck extends Component {
-
   render() {
     return (
-      <form className='spellcheck-form'>
-        <textarea className='spellcheck-text' name='spellcheckText' />
-        <button className='reject-button'>
-          Reject
-        </button>
-        <button className='update-button'>
-          Update
-        </button>
-      </form>
+      <div className='spellcheck-container'>
+        { this.props.changesMade ?
+          <form className='spellcheck-form'>
+            <textarea
+              className='spellcheck-text'
+              name='spellCheckText'
+              value={ this.props.updatedText }
+              onChange={ this.props.onChange }
+            />
+            <button className='reject-button'>
+              Reject
+            </button>
+            <button className='update-button'>
+              Update
+            </button>
+          </form> :
+          <h3 className='no-errors'>Nothing to fix!</h3> }
+      </div>
     );
   }
 }

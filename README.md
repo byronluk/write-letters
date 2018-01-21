@@ -9,3 +9,4 @@
 ### Work in progress
 * Utilize handwriting API - conver text to handwriting
 * Add in spellcheck API
+* Add catch errors for fetch requests
