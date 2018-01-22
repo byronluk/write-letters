@@ -1,7 +1,7 @@
 /* things to do
 optional: add a download button to download pdf
+optional: add in a select dropdown for handwriting style options
 add in error handlers and loading handlers(if necessary)
-style and finish
 */
 import React, { Component } from 'react';
 import { HandWrite, SpellCheck } from './Input';
@@ -24,7 +24,7 @@ function spellCheckParser(input, tokens) {
   if (tokens.length < 1) {
     return addLineBreaks(input);
   }
-  //  searches for special characters at end of input
+  //  searches for special characters at end of input or whitespace
   const characterRegex = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?\.]$/;
   const words = input.split(' ');
   let responseIterator = 0;
@@ -34,30 +34,29 @@ function spellCheckParser(input, tokens) {
     if (characterRegex.test(words[inputIterator])) {
       //exec grabs value of character
       var character = characterRegex.exec(words[inputIterator])[0];
-      // removes special character from input since response returns tokens without unnecessary characters
+      // removes special character from input since get response returns tokens without characters
       // allows for proper matching at below if statement
       words[inputIterator] = words[inputIterator].replace(characterRegex, '');
     } else {
-      //  if no special character at end of input... leave blank
       var character = '';
     }
+    //  check if word matches token returned - if so - swap word out with suggestion
     if (!!tokens[responseIterator] && words[inputIterator] === tokens[responseIterator].token) {
       words.splice(inputIterator, 1, tokens[responseIterator].suggestions[0].suggestion + character);
       responseIterator++;
     } else {
-      // if no match... patches the word back up to normal
+      // if no match returns word back to prior state
       words[inputIterator] += character;
     }
   }
   return addLineBreaks(words.join(' '));
 }
-//  removes \n to format text for get request
-//  replaces \n with ' new line '
+// Replaces all line breaks with ' New line '
 function replaceLineBreaks(input) {
   var lineBreakRegex = /(\r\n|\n|\r)/gm;
   return input.replace(lineBreakRegex, ' New line ');
 }
-//  reformats results and replaces ' new line ' with \n
+//  Replaces ' New line ' with line breaks
 function addLineBreaks(input) {
   return input.replace(/\sNew\sline\s/g, '\n');
 }
@@ -79,7 +78,7 @@ class App extends Component {
     this.onUpdateClick = this.onUpdateClick.bind(this);
     this.onRejectClick = this.onRejectClick.bind(this);
   }
-  // sends request after debounce and x amount of seconds
+  //  function will run after 1/2 second of inactivity
   delayHandwrite = debounce(() => {
     if (!this.state.inputText) {
       return (this.setState({
@@ -90,7 +89,7 @@ class App extends Component {
     //  removes text that will break the img
     const filteredText = stateCopy.inputText.replace(/[`<>\\\[\]{}_\^]/gi, '');
     const params = {
-      handwriting_id: '5WGWVYD800X0',
+      handwriting_id: '5WGWVV8800VH',
       text: filteredText,
     };
     //  creates query parameters for url
@@ -100,7 +99,7 @@ class App extends Component {
     fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Basic ${encoded}`,
+        Authorization: `Basic ${encoded}`,
       } })
       .then((response) => {
         this.setState({
@@ -125,9 +124,10 @@ class App extends Component {
     }
     this.delayHandwrite();
   }
-  // get request to /pdf
   onDownloadClick(e) {
+  //  get request to /pdf
     e.preventDefault();
+    return alert('button not working yet... sorry!');
   }
 
   onSpellCheckClick(e) {
@@ -136,7 +136,7 @@ class App extends Component {
       return alert('Please enter text for me to check');
     }
     const stateCopy = Object.assign({}, this.state);
-    // removes line breaks
+    // removes line breaks so api will return something
     const singleLine = replaceLineBreaks(stateCopy.inputText);
     const params = {
       text: singleLine,
@@ -183,7 +183,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <h1>Write a letter</h1>
+        <h1 className='page-title'>Write a letter</h1>
         <div className='input-div'>
           <HandWrite
             onInputChange={ this.onInputChange }
