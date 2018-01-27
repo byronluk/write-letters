@@ -1,5 +1,11 @@
 # Write Letters
 
+## REQUIRED
+```
+Must have a config.js file in root directory of project
+Should have an API key from handwriting.io and bing spellcheck
+```
+
 ## Setup
 1. npm install
 2. npm run build

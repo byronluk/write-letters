@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { HandWrite, SpellCheck } from './Input';
 import Output from './Output';
 // spellcheck api is from microsoft bing - 30 day free trial
-import { handwritingKey, spellCheckKey } from '../server/config';
+import { handwritingKey, spellCheckKey } from '../config';
 const debounce = require('lodash.debounce');
 
 //  get apiKey from handwriting.io
