@@ -9,6 +9,7 @@ import Output from './Output';
 // spellcheck api is from microsoft bing - 30 day free trial
 // import { handwritingKey, spellCheckKey } from '../config';
 //  heroku environment variables
+import { handwritingKey, spellCheckKey } from '../server/index';
 
 const debounce = require('lodash.debounce');
 
