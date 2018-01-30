@@ -10,6 +10,7 @@ import Output from './Output';
 // import { handwritingKey, spellCheckKey } from '../config';
 //  heroku environment variables
 var spellCheckKey = process.env.SPELLCHECK_API_KEY;
+console.log(spellCheckKey);
 var handwritingKey = process.env.HANDWRITE_API_KEY;
 
 const debounce = require('lodash.debounce');
