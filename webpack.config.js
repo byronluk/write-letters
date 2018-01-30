@@ -19,10 +19,6 @@ module.exports = {
     },
     extensions: ['.js', '.jsx']
   },
-  node: {
-    fs: 'empty',
-    net: 'empty',
-  },
   plugins: [
     new webpack.DefinePlugin({
       REACT_APP_HANDWRITE_API_KEY: JSON.stringify(process.env.REACT_APP_HANDWRITE_API_KEY),

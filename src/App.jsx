@@ -11,8 +11,6 @@ import Output from './Output';
 //  heroku environment variables
 const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
 const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
-console.log(handwritingKey);
-console.log(spellCheckKey);
 const debounce = require('lodash.debounce');
 
 //  get apiKey from handwriting.io
