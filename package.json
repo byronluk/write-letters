@@ -4,8 +4,8 @@
   "description": "Hackathon Assignment - Handwrite letters",
   "main": "server/index.js",
   "scripts": {
-    "build": "webpack -w",
-    "start": "node server/index.js",
+    "start": "npm run build && node server/index.js",
+    "build": "npm run less && webpack",
     "less": "lessc src/css/style.less dist/css/style.css",
     "lint": "eslint ."
   },
