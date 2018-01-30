@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   context: path.join(__dirname, '/src'),
@@ -18,6 +19,16 @@ module.exports = {
     },
     extensions: ['.js', '.jsx']
   },
+  node: {
+    fs: 'empty',
+    net: 'empty',
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      REACT_APP_HANDWRITE_API_KEY: JSON.stringify(process.env.REACT_APP_HANDWRITE_API_KEY),
+      REACT_APP_SPELLCHECK_API_KEY: JSON.stringify(process.env.REACT_APP_SPELLCHECK_API_KEY),
+    })
+  ],
 
   module: {
     loaders: [
