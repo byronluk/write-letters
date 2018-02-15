@@ -7,10 +7,10 @@ import React, { Component } from 'react';
 import { HandWrite, SpellCheck } from './Input';
 import Output from './Output';
 // spellcheck api is from microsoft bing - 30 day free trial
-import { handwritingKey, spellCheckKey } from '../config';
+// import { handwritingKey, spellCheckKey } from '../config';
 //  heroku environment variables
-// const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
-// const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
+const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
+const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
 const debounce = require('lodash.debounce');
 const axios = require('axios');
 
