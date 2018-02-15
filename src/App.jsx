@@ -7,11 +7,12 @@ import React, { Component } from 'react';
 import { HandWrite, SpellCheck } from './Input';
 import Output from './Output';
 // spellcheck api is from microsoft bing - 30 day free trial
-// import { handwritingKey, spellCheckKey } from '../config';
+import { handwritingKey, spellCheckKey } from '../config';
 //  heroku environment variables
-const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
-const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
+// const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
+// const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
 const debounce = require('lodash.debounce');
+const axios = require('axios');
 
 //  get apiKey from handwriting.io
 const encoded = btoa(handwritingKey);
@@ -23,6 +24,7 @@ function queryBuilder(params) {
           .map(key => `${esc(key)}=${esc(params[key])}`)
           .join('&'));
 }
+
 function spellCheckParser(input, tokens) {
   if (tokens.length < 1) {
     return addLineBreaks(input);
@@ -99,18 +101,21 @@ class App extends Component {
     const query = queryBuilder(params);
     //  later on... add option for pdf(download) or png(view)
     const url = `https://api.handwriting.io/render/png?${query}`;
-    fetch(url, {
-      method: 'GET',
+ 
+    axios.get(url, {
+      responseType: 'arraybuffer',
       headers: {
         Authorization: `Basic ${encoded}`,
-      } })
-      .then((response) => {
+      }
+    }).then(response => {
+      //  converts binary to base64
+        const base64png = Buffer.from(response.data, 'binary').toString('base64');
         this.setState({
-          imgURL: response.url,
+          imgURL: 'data:image/png;base64,' + base64png,
         })
       })
-      .catch((error) => {
-        return (console.error(error));
+      .catch(function (error) {
+        console.log(error);
       });
   }, 500);
 
