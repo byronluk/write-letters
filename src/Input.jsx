@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class HandWrite extends Component {
 
@@ -15,16 +16,30 @@ class HandWrite extends Component {
             value={ this.props.updatedText }
           />
         </label>
-        <button className='spellcheck-button button left-button-spacing' onClick={ this.props.onSpellCheckClick }>
+        <button
+          className='spellcheck-button button left-button-spacing'
+          onClick={ this.props.onSpellCheckClick }
+        >
           Spellcheck
         </button>
-        <button className='download-button button right-button-spacing' onClick={ this.props.onDownloadClick }>
+        <button
+          className='download-button button right-button-spacing'
+          onClick={ this.props.onDownloadClick }          
+        >
           Download
         </button>
       </form>
     );
   }
 }
+
+HandWrite.propTypes = {
+  onInputChange: PropTypes.func,
+  onSpellCheckClick: PropTypes.func,
+  onDownloadClick: PropTypes.func,
+  updatedText: PropTypes.string,
+  pdfData: PropTypes.string,
+};
 
 class SpellCheck extends Component {
   render() {
@@ -42,10 +57,16 @@ class SpellCheck extends Component {
                 onChange={ this.props.onChange }
               />
             </label>
-            <button className='reject-button button left-button-spacing' onClick={ this.props.onReject }>
+            <button
+              className='reject-button button left-button-spacing'
+              onClick={ this.props.onReject }
+            >
               Reject
             </button>
-            <button className='update-button button right-button-spacing' onClick={ this.props.onUpdate }>
+            <button
+              className='update-button button right-button-spacing'
+              onClick={ this.props.onUpdate }
+            >
               Update
             </button>
           </form> :
@@ -54,6 +75,14 @@ class SpellCheck extends Component {
     );
   }
 }
+
+SpellCheck.propTypes = {
+  updatedText: PropTypes.string,
+  changesMade: PropTypes.bool,
+  onChange: PropTypes.func,
+  onReject: PropTypes.func,
+  onUpdate: PropTypes.func,
+};
 
 module.exports = {
   HandWrite,

@@ -7,10 +7,10 @@ import React, { Component } from 'react';
 import { HandWrite, SpellCheck } from './Input';
 import Output from './Output';
 // spellcheck api is from microsoft bing - 30 day free trial
-// import { handwritingKey, spellCheckKey } from '../config';
+import { handwritingKey, spellCheckKey } from '../config';
 //  heroku environment variables
-const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
-const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
+// const handwritingKey = REACT_APP_HANDWRITE_API_KEY;
+// const spellCheckKey = REACT_APP_SPELLCHECK_API_KEY;
 const debounce = require('lodash.debounce');
 const axios = require('axios');
 
@@ -75,6 +75,7 @@ class App extends Component {
       spellCheckEnabled: false,
       changesMade: false,
       imgURL: '',
+      pdfData: '',
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.onDownloadClick = this.onDownloadClick.bind(this);
@@ -133,9 +134,38 @@ class App extends Component {
     this.delayHandwrite();
   }
   onDownloadClick(e) {
-  //  get request to /pdf
     e.preventDefault();
-    return alert('button not working yet... sorry!');
+    const filteredText = this.state.inputText.replace(/[`<>\\\[\]{}_\^]/gi, '');
+    const params = {
+      handwriting_id: '5WGWVV8800VH',
+      text: filteredText,
+    };
+    const query = queryBuilder(params);
+    const url = `https://api.handwriting.io/render/pdf?${query}`;
+ 
+    axios.get(url, {
+      responseType: 'arraybuffer',
+      headers: {
+        Authorization: `Basic ${encoded}`,
+      }
+    }).then(response => {
+      //  converts binary to base64
+      const base64pdf = Buffer.from(response.data, 'binary').toString('base64');
+      const pdfURL = 'data:application/octet-stream;charset=utf-16le;base64,' + base64pdf;
+
+		// Construct the <a> element
+		var link = document.createElement("a");
+		link.download = 'handwriting.pdf';
+		link.href = pdfURL;
+
+		document.body.appendChild(link);
+		link.click();
+
+		// Cleanup the DOM
+		document.body.removeChild(link);
+    }).catch(function (error) {
+        console.log(error);
+      });
   }
 
   onSpellCheckClick(e) {
@@ -198,6 +228,7 @@ class App extends Component {
             onDownloadClick={ this.onDownloadClick }
             onSpellCheckClick={ this.onSpellCheckClick }
             updatedText={ this.state.inputText }
+            pdfData={ this.state.pdfData }
           />
           { this.state.spellCheckEnabled &&
           <SpellCheck
